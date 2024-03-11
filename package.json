@@ -4,7 +4,7 @@
   "description": "MERN stack ecommerce site",
   "main": "src/server.js",
   "scripts": {
-    "start":"node src/server.js",
+    "start":"xcopy /s /e src\\uploads\\ src\\uploads && node src/server.js",
     "seeder":"node src/utils/seeder.js"
   },
   "author": "",
