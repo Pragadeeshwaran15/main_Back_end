@@ -16,12 +16,13 @@ const products = require('./routes/product')
 const auth = require('./routes/auth')
 const order = require('./routes/order')
 const payment = require('./routes/payment')
-
+const home=require('./routes/home')
 
 app.use('/api/v1',products);
 app.use('/api/v1',auth);
 app.use('/api/v1',order);
 app.use('/api/v1',payment);
+app.use('/',home);
 
 
 app.use(errorMiddleware)
