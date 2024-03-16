@@ -4,8 +4,8 @@
   "description": "MERN stack ecommerce site",
   "main": "src/server.js",
   "scripts": {
-    "start":"node src/server.js",
-    "seeder":"node src/utils/seeder.js"
+    "start": "node src/server.js",
+    "seeder": "node src/utils/seeder.js"
   },
   "author": "",
   "license": "ISC",
