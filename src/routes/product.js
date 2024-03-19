@@ -24,7 +24,7 @@ router.route('/review').put(isAuthenticatedUser,createReview)
 
 //Admin routes
 router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images'), newProduct);
-router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles('admin'), getAdminProducts);
+router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles('admin','seller'), getAdminProducts);
 router.route('/admin/product/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
 router.route('/admin/product/:id').put(isAuthenticatedUser, authorizeRoles('admin'),upload.array('images'), updateProduct);
 router.route('/admin/reviews').get(isAuthenticatedUser, authorizeRoles('admin'),getReviews)
