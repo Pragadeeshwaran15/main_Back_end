@@ -5,14 +5,14 @@ const ErrorHandler = require("../utils/errorHandler");
 exports.postAd = catchAsyncError(async (req, res, next) => {
   
   try {
-  let avatar;
+  let adbanner;
   let BASE_URL = process.env.BACKEND_URL;
   if (process.env.NODE_ENV === "production") {
     BASE_URL = `${req.protocol}://${req.get("host")}`;
   }
 
   if (req.file) {
-    avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`;
+    adbanner = `${BASE_URL}/uploads/user/${req.file.originalname}`;
   }
 
   const banner = await Ad.create({
