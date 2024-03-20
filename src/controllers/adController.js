@@ -1,9 +1,6 @@
 const Ad = require("../models/admodel");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
-
-// Import necessary modules
-const Ad = require('../models/Ad'); // Assuming Ad is your Mongoose model for ads
 const { validationResult } = require('express-validator');
 
 // Create the postAd controller function
