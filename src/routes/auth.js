@@ -28,7 +28,7 @@ const {
  } = require('../controllers/authController');
 const router = express.Router();
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/authenticate');
-const { postAd, deleteAd, updateAd, getAllimgaes } = require('../controllers/adController');
+
 
 
 router.route('/register').post(upload.single('avatar'), registerUser);
@@ -45,11 +45,6 @@ router.route('/admin/users').get(isAuthenticatedUser,authorizeRoles('admin'), ge
 router.route('/admin/user/:id').get(isAuthenticatedUser,authorizeRoles('admin'), getUser)
                                 .put(isAuthenticatedUser,authorizeRoles('admin'), updateUser)
                                 .delete(isAuthenticatedUser,authorizeRoles('admin'), deleteUser);
-//ad rutes
-router.route('/admin/banner/new').post(isAuthenticatedUser,authorizeRoles('admin'),postAd)
-router.route('/admin/banner/:id').delete(isAuthenticatedUser,authorizeRoles('admin'),deleteAd)
-router.route('/admin/banner/:id').put(isAuthenticatedUser,authorizeRoles('admin'),updateAd)
-router.route('/ad/banner').get(getAllimgaes)
 
 
 module.exports = router;
