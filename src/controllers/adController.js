@@ -2,32 +2,53 @@ const Ad = require("../models/admodel");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 
+// Import necessary modules
+const catchAsyncError = require('../middlewares/catchAsyncError');
+const Ad = require('../models/Ad'); // Assuming Ad is your Mongoose model for ads
+const { validationResult } = require('express-validator');
+
+// Create the postAd controller function
 exports.postAd = catchAsyncError(async (req, res, next) => {
-   try {
-    const { adbanner } = req.body;
-  
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    let adbanner = ''; // Initialize adbanner variable
     let BASE_URL = process.env.BACKEND_URL;
     if (process.env.NODE_ENV === "production") {
       BASE_URL = `${req.protocol}://${req.get("host")}`;
     }
-  
+    // Check if there's a file uploaded
     if (req.file) {
-      adbanner = `${process.env.BACKEND_URL}/uploads/Ads/${req.file.originalname}`;
+      // Construct the adbanner URL using the backend URL and file name
+      adbanner = `${BASE_URL}/uploads/Ads/${req.file.originalname}`;
+    } else {
+      // If no file is uploaded, use the adbanner value from the request body
+      adbanner = req.body.adbanner;
     }
-  
+
+    // Create a new ad record in the database
     const adimage = await Ad.create({
       adbanner,
     });
-  
+
+    // Send success response with the created ad image data
     res.status(200).json({
-        message:"success",adimage
-    })
-   } catch (error) {
-    res.status(500).send({
-        message:error.message
-    })
-   }
-  });
+      message: 'Success',
+      adimage,
+    });
+  } catch (error) {
+    // Handle any errors that occur during ad creation
+    console.error('Error creating ad:', error);
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
+  }
+});
+
 
 //Admin: Delete User - api/v1/admin/user/:id
 exports.deleteAd = catchAsyncError(async (req, res, next) => {
