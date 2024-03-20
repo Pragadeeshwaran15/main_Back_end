@@ -2,28 +2,35 @@ const Ad = require("../models/admodel");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 
+// Define the postAd controller function
 exports.postAd = catchAsyncError(async (req, res, next) => {
-  
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-  let adbanner;
-  let BASE_URL = process.env.BACKEND_URL;
-  if (process.env.NODE_ENV === "production") {
-    BASE_URL = `${req.protocol}://${req.get("host")}`;
-  }
+    let adbanner = ''; // Initialize adbanner variable
 
-  if (req.file) {
-    adbanner = `${BASE_URL}/uploads/user/${req.file.originalname}`;
-  }
+    // Check if there's a file uploaded
+    if (req.file) {
+      // Construct the adbanner URL using the backend URL and file name
+      adbanner = `${process.env.BACKEND_URL}/uploads/Ads/${req.file.originalname}`;
+    } else {
+      // If no file is uploaded, use the adbanner value from the request body
+      adbanner = req.body.adbanner;
+    }
 
-  const banner = await Ad.create({
-    
-    adbanner  });
-
+    // Create a new ad record in the database
+    const adimage = await Ad.create({
+      adbanner,
+    });
 
     // Send success response with the created ad image data
     res.status(200).json({
       message: 'Success',
-      banner,
+      adimage,
     });
   } catch (error) {
     // Handle any errors that occur during ad creation
@@ -32,7 +39,7 @@ exports.postAd = catchAsyncError(async (req, res, next) => {
       message: 'Internal Server Error',
     });
   }
-})
+});
 
 //Admin: Delete User - api/v1/admin/user/:id
 exports.deleteAd = catchAsyncError(async (req, res, next) => {
