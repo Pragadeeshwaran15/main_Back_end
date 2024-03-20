@@ -17,8 +17,7 @@ exports.postAd = catchAsyncError(async (req, res, next) => {
 
   const banner = await Ad.create({
     
-    avatar
-  });
+    adbanner  });
 
 
     // Send success response with the created ad image data
