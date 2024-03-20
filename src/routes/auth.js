@@ -49,7 +49,7 @@ router.route('/admin/user/:id').get(isAuthenticatedUser,authorizeRoles('admin'),
 router.route('/admin/banner/new').post(isAuthenticatedUser,authorizeRoles('admin'),postAd)
 router.route('/admin/banner/:id').delete(isAuthenticatedUser,authorizeRoles('admin'),deleteAd)
 router.route('/admin/banner/:id').put(isAuthenticatedUser,authorizeRoles('admin'),updateAd)
-router.route('/admin/banner').get(getAllimgaes)
+router.route('/ad/banner').get(getAllimgaes)
 
 
 module.exports = router;
