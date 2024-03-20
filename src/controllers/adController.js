@@ -3,17 +3,22 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 
 exports.postAd = catchAsyncError(async (req, res, next) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    let adbanner ; // Initialize adbanner variable
+    let adbanner = ''; // Initialize adbanner variable
     let BASE_URL = process.env.BACKEND_URL;
     if (process.env.NODE_ENV === "production") {
       BASE_URL = `${req.protocol}://${req.get("host")}`;
     }
-  
     // Check if there's a file uploaded
-    if (req.file) {
-      // Construct the adbanner URL using the backend URL and file name
-      adbanner = `${process.env.BACKEND_URL}/uploads/Ads/${req.file.originalname}`;
+    if (req.files && req.files.length > 0) {
+      // Assuming req.files is an array of uploaded files
+      adbanner = req.files.map(file => `${BASE_URL}/uploads/Ads/${file.originalname}`);
     } else {
       // If no file is uploaded, use the adbanner value from the request body
       adbanner = req.body.adbanner;
@@ -36,7 +41,7 @@ exports.postAd = catchAsyncError(async (req, res, next) => {
       message: 'Internal Server Error',
     });
   }
-});
+})
 
 //Admin: Delete User - api/v1/admin/user/:id
 exports.deleteAd = catchAsyncError(async (req, res, next) => {
