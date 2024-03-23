@@ -5,7 +5,7 @@ const APIFeatures = require('../utils/apiFeatures');
 
 //Get Products - /api/v1/products
 exports.getProducts = catchAsyncError(async (req, res, next)=>{
-    const resPerPage = 12;
+    const resPerPage = 3;
     
     let buildQuery = () => {
         return new APIFeatures(Product.find(), req.query).search().filter()
@@ -36,8 +36,6 @@ exports.newProduct = catchAsyncError(async (req, res, next)=>{
     if(process.env.NODE_ENV === "production"){
         BASE_URL = `${req.protocol}://${req.get('host')}`
     }
-
-  
     
     if(req.files.length > 0) {
         req.files.forEach( file => {
@@ -126,7 +124,7 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) =>{
         });
     }
 
-    await product.deleteOne();
+    await product.remove();
 
     res.status(200).json({
         success: true,
