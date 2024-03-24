@@ -50,7 +50,21 @@ userSchema.methods.getJwtToken = function(){
 }
 
 userSchema.methods.isValidPassword = async function(enteredPassword){
-    return  bcrypt.compare(enteredPassword, this.password)
+    try {
+        // Check if enteredPassword and this.password are defined
+        if (!enteredPassword || !this.password) {
+            throw new Error('Password or hashed password is missing');
+        }
+
+        // Compare the entered password with the hashed password
+        const isMatch = await bcrypt.compare(enteredPassword, this.password);
+
+        return isMatch;
+    } catch (error) {
+        // Handle any errors, such as logging or throwing an error
+        console.error('Error comparing passwords:', error);
+        throw new Error('Error comparing passwords');
+    }
 }
 
 userSchema.methods.getResetToken = function(){
