@@ -36,12 +36,21 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.pre('save', async function (next){
-    if(!this.isModified('password')){
-        next();
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
     }
-    this.password  = await bcrypt.hash(this.password, 10)
-})
+    try {
+        if (!this.password) {
+            throw new Error('Password is required');
+        }
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error); // Pass the error to the next middleware or error handler
+    }
+});
 
 userSchema.methods.getJwtToken = function(){
    return jwt.sign({id: this.id}, process.env.JWT_SECRET, {
