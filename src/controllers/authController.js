@@ -146,20 +146,41 @@ exports.getUserProfile = catchAsyncError(async (req, res, next) => {
 })
 
 //Change Password  - api/v1/password/change
-exports.changePassword  = catchAsyncError(async (req, res, next) => {
-    const user = await User.findById(req.user.id).select('+password');
-    //check old password
-    if(!await user.isValidPassword(req.body.oldPassword)) {
-        return next(new ErrorHandler('Old password is incorrect', 401));
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+    const resetPasswordToken = req.params.token;
+    const { password, confirmPassword } = req.body;
+
+    if (!resetPasswordToken) {
+        return next(new ErrorHandler('Invalid token', 400));
     }
 
-    //assigning new password
-    user.password = req.body.password;
+    if (password !== confirmPassword) {
+        return next(new ErrorHandler('Passwords do not match', 400));
+    }
+
+    // Find user by resetPasswordToken and check if token is still valid
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return next(new ErrorHandler('Invalid or expired token', 400));
+    }
+
+    // Reset user's password
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpire = undefined;
+
     await user.save();
+
+    // Send response with success message
     res.status(200).json({
-        success:true,
-    })
- })
+        success: true,
+        message: 'Password reset successful',
+    });
+});
 
 //Update Profile - /api/v1/update
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
