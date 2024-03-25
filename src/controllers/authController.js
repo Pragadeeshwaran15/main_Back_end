@@ -160,7 +160,6 @@ exports.changePassword  = catchAsyncError(async (req, res, next) => {
         success:true,
     })
  })
-
 //Update Profile - /api/v1/update
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
     let newUserData = {

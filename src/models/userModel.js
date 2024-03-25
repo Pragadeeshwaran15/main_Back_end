@@ -58,22 +58,8 @@ userSchema.methods.getJwtToken = function(){
     })
 }
 
-userSchema.methods.isValidPassword = async function(enteredPassword) {
-    try {
-        // Check if enteredPassword and this.password are defined and not empty
-        if (!enteredPassword || !this.password || !enteredPassword.trim() || !this.password.trim()) {
-            throw new Error('Password or hashed password is missing or empty');
-        }
-
-        // Compare the entered password with the hashed password
-        const isMatch = await bcrypt.compare(enteredPassword.trim(), this.password.trim());
-
-        return isMatch;
-    } catch (error) {
-        // Handle any errors, such as logging or throwing an error
-        console.error('Error comparing passwords:', error);
-        throw new Error('Error comparing passwords');
-    }
+userSchema.methods.isValidPassword = async function(enteredPassword){
+    return  bcrypt.compare(enteredPassword, this.password)
 }
 
 
