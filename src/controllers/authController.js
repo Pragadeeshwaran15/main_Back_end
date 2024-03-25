@@ -149,8 +149,8 @@ exports.getUserProfile = catchAsyncError(async (req, res, next) => {
 exports.changePassword = catchAsyncError(async (req, res, next) => {
     console.log('Request Body:', req.body); // Debugging log
 
-    const oldPassword = req.body.oldPassword.trim();
-    const newPassword = req.body.password.trim();
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.password;
 
     if (!oldPassword || !newPassword) {
         return next(new ErrorHandler('Old password or new password is missing', 400));
