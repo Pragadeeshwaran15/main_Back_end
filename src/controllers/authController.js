@@ -247,7 +247,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
     if(!user) {
         return next(new ErrorHandler(`User not found with this id ${req.params.id}`))
     }
-    await user.remove();
+    await user.deleteOne();
     res.status(200).json({
         success: true,
     })
