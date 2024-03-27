@@ -147,7 +147,7 @@ exports.getUserProfile = catchAsyncError(async (req, res, next) => {
 
 //Change Password  - api/v1/password/change
 exports.changePassword = catchAsyncError(async (req, res, next) => {
-    console.log('Request Body:', req.body); // Debugging log
+    
 
     const oldPassword = req.body.oldPassword;
     const newPassword = req.body.password;
